@@ -6,6 +6,23 @@ using PruebaTecnica_Backend.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configuración del puerto desde la variable de entorno
+var port = Environment.GetEnvironmentVariable("PORT") ?? "80";
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(int.Parse(port)); // Escuchar en el puerto configurado
+});
+
+// Agregar servicios CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()    // Permitir cualquier origen
+              .AllowAnyHeader()    // Permitir cualquier encabezado
+              .AllowAnyMethod();   // Permitir cualquier método (GET, POST, PUT, DELETE)
+    });
+});
 // Agregar servicios CORS
 builder.Services.AddCors(options =>
 {
